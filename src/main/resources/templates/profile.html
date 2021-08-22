@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="content">
+    <div class="row" th:if="${CURRENT_USER!=null}">
+        <div class="col-6 mx-auto">
+            <h1 class="my-3 text-center">WELCOME <span th:text="${CURRENT_USER.fullname}"></span></h1>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if = "${param.success!=null}">
+                User updated successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if = "${param.passwordsuccess!=null}">
+                Password updated successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if = "${param.oldpasserror!=null}">
+                Old password is incorrect!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if = "${param.passworderror!=null}">
+                New passwords are not same!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form th:action="@{'/updateprofile'}" method="post">
+                <div class="mt-2">
+                    <label>EMAIL: </label>
+                    <input type="text" class="form-control mt-2 bg-light" readonly th:value="${CURRENT_USER.email}">
+                </div>
+                <div class="mt-2">
+                    <label>FULL NAME: </label>
+                    <input type="text" class="form-control mt-2" name="fullname" required th:value="${CURRENT_USER.fullname}">
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success">UPDATE PROFILE</button>
+                </div>
+            </form>
+            <form th:action="@{'/updatepassword'}" method="post" class="mt-2">
+                <div class="mt-2">
+                    <label>OLD PASSWORD: </label>
+                    <input type="password" class="form-control mt-2" name="oldpassword" required>
+                </div>
+                <div class="mt-2">
+                    <label>NEW PASSWORD: </label>
+                    <input type="password" class="form-control mt-2" name="newpassword" required>
+                </div>
+                <div class="mt-2">
+                    <label>RETYPE NEW PASSWORD: </label>
+                    <input type="password" class="form-control mt-2" name="renewpassword" required>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success">UPDATE PASSWORD</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

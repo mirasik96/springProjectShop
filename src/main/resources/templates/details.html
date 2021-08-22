@@ -1,0 +1,91 @@
+<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorator="layout/main.html">
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col-6 mx-auto">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr th:each="cat: ${item.categories}">
+                            <form th:action="@{'/deleteCategoryInItem'}" method="post">
+                                <input type="hidden" th:value="${item.id}" name="id">
+                                <input type="hidden" th:value="${cat.id}" name="categoryId">
+                                <td th:text = "${cat.name}"></td>
+                                <td width="5%" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                    <button class="btn btn-danger btn-sm"> - </button>
+                                </td>
+                            </form>
+                        </tr>
+                    </tbody>
+                </table>
+
+            <table class="table table-striped" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')">
+                <tbody>
+                <tr th:each="cat: ${categories}">
+                    <form th:action="@{'/addCategoryInItem'}" method="post">
+                        <input type="hidden" th:value="${item.id}" name="id">
+                        <input type="hidden" th:value="${cat.id}" name="categoryId">
+                        <td th:text = "${cat.name}"></td>
+                        <td width="5%">
+                            <button class="btn btn-success btn-sm"> + </button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+
+            <form th:action="@{'/details'}" method="post">
+                <div class="modal-body">
+                    <div>
+                        Name: <input class="form-control" type="text" name="name" th:value="${item.name}">
+                    </div>
+                    <div>
+                        Brand: <select class="form-control" name="brandId">
+                        <option th:each="b: ${brands}" th:selected="${item.brand.id==b.id}" th:text="${b.name}" th:value="${b.id}"></option>
+                    </select>
+                    </div>
+                    <div>
+                        Details: <input class="form-control" type="text" name="description" th:value="${item.description}">
+                    </div>
+                    <div>
+                        Price: <input class="form-control" type="number" name="price" th:value="${item.price}">
+                    </div>
+                    <div>
+                        Amount: <input class="form-control" type="number" name="amount" th:value="${item.amount}">
+                    </div>
+                </div>
+                <div class="modal-footer" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')">
+                    <input type="hidden" name="id" th:value="${item.id}">
+                    <button class="btn btn-primary">Edit</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                        Delete
+                    </button>
+                </div>
+            </form>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Deletion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a th:href="@{'/deleteItem/'+${item.getId()}}" class="btn btn-danger">Yes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,19 @@
+<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="content">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="i: ${items}">
+            <div class="card text-dark bg-light text-center mt-4" style="max-width: 25rem;">
+                <div class="card-header text-center" style="font-size: 25px" th:text="${i.name}"></div>
+                <div class="card-body text-center">
+                    <h5 class="card-title text-center text-success" style="font-size: 25px" th:text="${i.price}"> KZT</h5>
+                    <p class="card-text text-center" th:text="${i.description}"></p>
+                    <a class="btn btn-primary" th:href="@{'/details/'+${i.getId()}}">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
